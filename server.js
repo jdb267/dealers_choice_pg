@@ -31,8 +31,6 @@ app.get('/albums', async (req, res, next) => {
               .join('')}
         </ul>
     </body>
-    
-    
     </html>`);
   } catch (ex) {
     next(ex);
@@ -41,7 +39,16 @@ app.get('/albums', async (req, res, next) => {
 
 app.get('/albums/:id', async (req, res, next) => {
   try {
-    const albums = await Album.findAll();
+    const albums = await Album.findAll({ where: { name: req.params.id } });
+    if (albums.length === 0) {
+      res.send(`<html>
+      <head></head>
+      <body>
+          <h1>Album Not Found</h1>
+          <a href="/albums">All Albums</a>
+      </body>
+      </html>`);
+    }
     res.send(`<html>
     <head></head>
     <body>
